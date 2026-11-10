@@ -1,1 +1,1353 @@
 
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Agus Demo App</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* =========================================================
+   TOKENS — layout: sidebar + main content area
+   ========================================================= */
+:root {
+  --bg:        #f0f2f7;
+  --bg2:       #e4e8f0;
+  --surface:   #ffffff;
+  --surface2:  #f7f9fc;
+  --border:    #dde2ec;
+  --fg:        #1a1f36;
+  --fg2:       #4a5278;
+  --fg3:       #8892b0;
+  --accent:    #3d6df8;
+  --accent-h:  #2550d4;
+  --accent-bg: #edf1ff;
+  --green:     #22c55e;
+  --green-bg:  #dcfce7;
+  --red:       #ef4444;
+  --red-bg:    #fee2e2;
+  --orange:    #f59e0b;
+  --orange-bg: #fef3c7;
+  --purple:    #8b5cf6;
+  --purple-bg: #ede9fe;
+  --sidebar-w: 240px;
+  --header-h:  60px;
+  --radius:    10px;
+  --shadow:    0 1px 4px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1117; --bg2: #161b27; --surface: #1c2235; --surface2: #232a3e;
+    --border: #2a3352; --fg: #e2e8f8; --fg2: #9aaac8; --fg3: #5a6a8a;
+    --accent: #5b82ff; --accent-h: #7a98ff; --accent-bg: #1a2650;
+    --green: #4ade80; --green-bg: #052e1a; --red: #f87171; --red-bg: #2d0f0f;
+    --orange: #fbbf24; --orange-bg: #2d1f05; --purple: #a78bfa; --purple-bg: #1e1540;
+    --shadow: 0 1px 4px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1117; --bg2: #161b27; --surface: #1c2235; --surface2: #232a3e;
+  --border: #2a3352; --fg: #e2e8f8; --fg2: #9aaac8; --fg3: #5a6a8a;
+  --accent: #5b82ff; --accent-h: #7a98ff; --accent-bg: #1a2650;
+  --green: #4ade80; --green-bg: #052e1a; --red: #f87171; --red-bg: #2d0f0f;
+  --orange: #fbbf24; --orange-bg: #2d1f05; --purple: #a78bfa; --purple-bg: #1e1540;
+  --shadow: 0 1px 4px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.2);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--fg);
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* =========================================================  SIDEBAR  */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transition: transform .25s ease;
+  z-index: 100;
+}
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.logo-icon {
+  width: 32px; height: 32px;
+  background: var(--accent);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: #fff; font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.logo-text { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; color: var(--fg); }
+.logo-sub { font-size: 10px; color: var(--fg3); line-height: 1; }
+
+.nav { flex: 1; padding: 12px 10px; display: flex; flex-direction: column; gap: 2px; }
+.nav-label {
+  font-size: 10px; font-weight: 600; color: var(--fg3);
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: 10px 10px 4px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--fg2);
+  font-weight: 500;
+  transition: background .15s, color .15s;
+  user-select: none;
+}
+.nav-item:hover { background: var(--bg2); color: var(--fg); }
+.nav-item.active { background: var(--accent-bg); color: var(--accent); }
+.nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto;
+  background: var(--red); color: #fff;
+  font-size: 10px; font-weight: 600;
+  padding: 1px 6px; border-radius: 10px;
+}
+
+.sidebar-footer {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--fg3);
+}
+.sidebar-footer strong { display: block; color: var(--fg2); font-size: 12px; }
+
+/* =========================================================  MAIN  */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-width: 0;
+}
+
+/* header */
+.topbar {
+  height: var(--header-h);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 max(20px, env(safe-area-inset-right, 0px)) 0 20px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.topbar-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 17px; flex: 1; }
+.topbar-sub { font-size: 12px; color: var(--fg3); }
+.menu-btn {
+  display: none; background: none; border: none; cursor: pointer;
+  color: var(--fg2); padding: 6px; border-radius: 6px;
+}
+.menu-btn:hover { background: var(--bg2); }
+
+.theme-btn {
+  background: none; border: 1px solid var(--border);
+  border-radius: 8px; cursor: pointer; color: var(--fg2);
+  padding: 6px 10px; font-size: 12px; font-weight: 500;
+  display: flex; align-items: center; gap: 5px;
+  transition: background .15s;
+}
+.theme-btn:hover { background: var(--bg2); }
+
+/* content */
+.content {
+  flex: 1; overflow-y: auto;
+  padding: 24px max(24px, env(safe-area-inset-right, 0px)) 24px 24px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+/* =========================================================  VIEWS  */
+.view { display: none; flex-direction: column; gap: 20px; }
+.view.active { display: flex; }
+
+/* section heading */
+.section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.section-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 16px; }
+.section-desc { font-size: 12px; color: var(--fg3); margin-top: 2px; }
+
+/* =========================================================  CARDS  */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.card-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.card-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14px; }
+.card-body { padding: 20px; }
+
+/* =========================================================  KPI TILES  */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.kpi-row { display: flex; align-items: center; justify-content: space-between; }
+.kpi-label { font-size: 12px; font-weight: 500; color: var(--fg2); letter-spacing: .01em; }
+.kpi-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+}
+.kpi-icon svg { width: 16px; height: 16px; }
+.kpi-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px; font-weight: 700; color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.kpi-trend { font-size: 11px; font-weight: 500; display: flex; align-items: center; gap: 3px; }
+.kpi-trend.up { color: var(--green); }
+.kpi-trend.down { color: var(--red); }
+
+/* =========================================================  CHARTS ROW  */
+.charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+.chart-wrap { position: relative; height: 220px; }
+
+/* =========================================================  TABLE  */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  text-align: left; padding: 11px 14px;
+  font-size: 11px; font-weight: 600; color: var(--fg3);
+  letter-spacing: .06em; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  white-space: nowrap;
+}
+tbody td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--fg); font-size: 13px;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--bg2); }
+.td-mono { font-variant-numeric: tabular-nums; }
+
+/* =========================================================  BADGE / STATUS  */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 2px 9px; border-radius: 20px;
+  font-size: 11px; font-weight: 600;
+}
+.badge-green  { background: var(--green-bg);  color: var(--green);  }
+.badge-red    { background: var(--red-bg);    color: var(--red);    }
+.badge-orange { background: var(--orange-bg); color: var(--orange); }
+.badge-purple { background: var(--purple-bg); color: var(--purple); }
+.badge-blue   { background: var(--accent-bg); color: var(--accent); }
+
+/* =========================================================  BUTTONS  */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  border: none; transition: background .15s, transform .1s;
+  font-family: 'Inter', sans-serif;
+}
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-h); }
+.btn-outline {
+  background: none; border: 1px solid var(--border);
+  color: var(--fg2);
+}
+.btn-outline:hover { background: var(--bg2); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid transparent; }
+.btn-danger:hover { background: var(--red); color: #fff; }
+
+/* =========================================================  FORM  */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1 / -1; }
+label { font-size: 12px; font-weight: 500; color: var(--fg2); }
+input, select, textarea {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--fg);
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+  outline: none;
+  transition: border-color .15s;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+textarea { resize: vertical; min-height: 72px; }
+.form-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+/* =========================================================  MODAL  */
+.overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.45);
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  width: 100%; max-width: 520px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.2);
+  animation: modal-in .2s ease;
+}
+@keyframes modal-in { from { opacity: 0; transform: scale(.96) translateY(8px); } }
+.modal-head {
+  padding: 18px 22px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px; }
+.modal-close {
+  background: none; border: none; cursor: pointer;
+  color: var(--fg3); font-size: 20px; line-height: 1; padding: 2px;
+}
+.modal-close:hover { color: var(--fg); }
+.modal-body { padding: 20px 22px; }
+.modal-foot { padding: 0 22px 18px; display: flex; gap: 8px; justify-content: flex-end; }
+
+/* =========================================================  CONFIRM  */
+.confirm-box { display: flex; flex-direction: column; gap: 12px; }
+.confirm-box p { margin: 0; color: var(--fg2); font-size: 13px; }
+.confirm-box strong { color: var(--fg); }
+
+/* =========================================================  TOAST  */
+.toast-area {
+  position: fixed; bottom: 24px; right: 24px; z-index: 999;
+  display: flex; flex-direction: column; gap: 8px; align-items: flex-end;
+}
+.toast {
+  background: var(--fg); color: var(--surface);
+  padding: 10px 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0,0,0,.2);
+  animation: toast-in .2s ease;
+  pointer-events: none;
+}
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } }
+
+/* =========================================================  EMPTY STATE  */
+.empty {
+  text-align: center; padding: 48px 24px;
+  color: var(--fg3); font-size: 13px;
+}
+.empty-icon { font-size: 32px; margin-bottom: 10px; }
+
+/* =========================================================  REPORT STAT ROW  */
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+.stat-lbl { font-size: 11px; color: var(--fg3); margin-top: 2px; }
+
+/* =========================================================  RESPONSIVE  */
+@media (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .charts-row { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  :root { --sidebar-w: 220px; }
+  .sidebar {
+    position: fixed; inset: 0 auto 0 0;
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+  }
+  .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,.2); }
+  .menu-btn { display: flex; }
+  .overlay-sidebar {
+    display: none;
+    position: fixed; inset: 0; z-index: 90;
+    background: rgba(0,0,0,.35);
+  }
+  .overlay-sidebar.open { display: block; }
+}
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr 1fr; }
+  .kpi-value { font-size: 20px; }
+  .stat-row { grid-template-columns: 1fr; }
+  .content { padding: 16px max(16px, env(safe-area-inset-right, 0px)) 16px 16px; }
+}
+</style>
+
+<!-- ============================================================ MARKUP -->
+<div id="sidebar-overlay" class="overlay-sidebar" onclick="closeSidebar()"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">AG</div>
+    <div>
+      <div class="logo-text">Agus Demo App</div>
+      <div class="logo-sub">Portfolio Demo v1.0</div>
+    </div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-label">Main Menu</div>
+    <div class="nav-item active" onclick="goTo('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="goTo('master',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z"/><path d="M16 3H8a1 1 0 0 0-1 1v3h10V4a1 1 0 0 0-1-1z"/></svg>
+      Master Data
+    </div>
+    <div class="nav-item" onclick="goTo('transaksi',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Transaksi
+      <span class="nav-badge" id="badge-trx">0</span>
+    </div>
+    <div class="nav-item" onclick="goTo('report',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Laporan
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <strong>Agus Gunawan</strong>
+    Fullstack Developer · 8+ Years
+  </div>
+</aside>
+
+<div class="main">
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="menu-btn" onclick="toggleSidebar()" aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div>
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-sub" id="topbar-sub">Overview & Summary</div>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="theme-icon"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <span id="theme-label">Light</span>
+    </button>
+  </header>
+
+  <!-- CONTENT AREA -->
+  <main class="content">
+
+    <!-- ==================================================== DASHBOARD VIEW -->
+    <section class="view active" id="view-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-row">
+            <span class="kpi-label">Total Pendapatan</span>
+            <div class="kpi-icon" style="background:var(--accent-bg)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-revenue">Rp 0</div>
+          <div class="kpi-trend up">▲ 12.4% dari bulan lalu</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-row">
+            <span class="kpi-label">Total Transaksi</span>
+            <div class="kpi-icon" style="background:var(--green-bg)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-trx">0</div>
+          <div class="kpi-trend up">▲ 8.1% dari bulan lalu</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-row">
+            <span class="kpi-label">Total Produk</span>
+            <div class="kpi-icon" style="background:var(--purple-bg)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2"><path d="M20 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1z"/><path d="M16 3H8a1 1 0 0 0-1 1v3h10V4a1 1 0 0 0-1-1z"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-products">0</div>
+          <div class="kpi-trend up">▲ 3 produk baru</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-row">
+            <span class="kpi-label">Rata-rata Transaksi</span>
+            <div class="kpi-icon" style="background:var(--orange-bg)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-avg">Rp 0</div>
+          <div class="kpi-trend down">▼ 2.3% dari bulan lalu</div>
+        </div>
+      </div>
+
+      <div class="charts-row">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Pendapatan Bulanan (2024)</span>
+          </div>
+          <div class="card-body">
+            <div class="chart-wrap"><canvas id="chartMonthly"></canvas></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Distribusi Kategori</span>
+          </div>
+          <div class="card-body">
+            <div class="chart-wrap"><canvas id="chartCat"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Transaksi Terbaru</span>
+          <button class="btn btn-outline btn-sm" onclick="goTo('transaksi', document.querySelector('[onclick=\"goTo(\'transaksi\',this)\"]'))">Lihat Semua</button>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table id="tbl-recent">
+              <thead><tr><th>#</th><th>Tanggal</th><th>Produk</th><th>Qty</th><th>Total</th><th>Status</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================== MASTER DATA VIEW -->
+    <section class="view" id="view-master">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Master Data Produk</div>
+          <div class="section-desc">Kelola data produk — tambah, edit, dan hapus.</div>
+        </div>
+        <button class="btn btn-primary" onclick="openProductModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tambah Produk
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-head" style="gap:8px; flex-wrap:wrap;">
+          <span class="card-title">Daftar Produk</span>
+          <div style="display:flex; gap:8px; margin-left:auto; flex-wrap:wrap;">
+            <input id="search-prod" type="text" placeholder="Cari produk…" style="width:200px" oninput="renderProducts()">
+            <select id="filter-cat" onchange="renderProducts()">
+              <option value="">Semua Kategori</option>
+              <option>Elektronik</option>
+              <option>Perangkat Lunak</option>
+              <option>Aksesoris</option>
+              <option>Layanan</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table id="tbl-products">
+              <thead><tr><th>#</th><th>Kode</th><th>Nama Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================== TRANSAKSI VIEW -->
+    <section class="view" id="view-transaksi">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Data Transaksi</div>
+          <div class="section-desc">Riwayat seluruh transaksi penjualan.</div>
+        </div>
+        <button class="btn btn-primary" onclick="openTrxModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tambah Transaksi
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-head" style="flex-wrap:wrap; gap:8px;">
+          <span class="card-title">Daftar Transaksi</span>
+          <div style="display:flex; gap:8px; margin-left:auto; flex-wrap:wrap;">
+            <select id="filter-status" onchange="renderTransactions()">
+              <option value="">Semua Status</option>
+              <option>Sukses</option>
+              <option>Pending</option>
+              <option>Dibatalkan</option>
+            </select>
+            <input id="search-trx" type="text" placeholder="Cari…" style="width:180px" oninput="renderTransactions()">
+          </div>
+        </div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table id="tbl-trx">
+              <thead><tr><th>No. Inv</th><th>Tanggal</th><th>Produk</th><th>Qty</th><th>Harga Satuan</th><th>Total</th><th>Status</th><th>Aksi</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================== REPORT VIEW -->
+    <section class="view" id="view-report">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Laporan & Analisis</div>
+          <div class="section-desc">Ringkasan data penjualan dan performa produk.</div>
+        </div>
+        <select id="report-year" onchange="renderReport()" style="width:120px">
+          <option>2024</option>
+        </select>
+      </div>
+
+      <div class="stat-row" id="report-stats"></div>
+
+      <div class="charts-row">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Trend Penjualan Bulanan</span></div>
+          <div class="card-body">
+            <div class="chart-wrap"><canvas id="chartRptLine"></canvas></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Penjualan per Kategori</span></div>
+          <div class="card-body">
+            <div class="chart-wrap"><canvas id="chartRptBar"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span class="card-title">Ringkasan per Produk</span></div>
+        <div class="card-body" style="padding:0">
+          <div class="table-wrap">
+            <table id="tbl-report">
+              <thead><tr><th>Produk</th><th>Kategori</th><th>Total Terjual</th><th>Total Pendapatan</th><th>Transaksi</th><th>Share (%)</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ==================================================== MODALS -->
+
+<!-- Product Modal -->
+<div class="overlay" id="modal-product">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title" id="modal-product-title">Tambah Produk</span>
+      <button class="modal-close" onclick="closeModal('modal-product')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Kode Produk</label>
+          <input id="p-code" placeholder="PRD-001">
+        </div>
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="p-cat">
+            <option>Elektronik</option>
+            <option>Perangkat Lunak</option>
+            <option>Aksesoris</option>
+            <option>Layanan</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Nama Produk</label>
+          <input id="p-name" placeholder="Masukkan nama produk">
+        </div>
+        <div class="form-group">
+          <label>Harga (Rp)</label>
+          <input id="p-price" type="number" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Stok</label>
+          <input id="p-stock" type="number" placeholder="0">
+        </div>
+        <div class="form-group full">
+          <label>Deskripsi</label>
+          <textarea id="p-desc" placeholder="Deskripsi singkat produk…"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="p-status">
+            <option>Aktif</option>
+            <option>Non-Aktif</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('modal-product')">Batal</button>
+      <button class="btn btn-primary" onclick="saveProduct()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Transaction Modal -->
+<div class="overlay" id="modal-trx">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title">Tambah Transaksi</span>
+      <button class="modal-close" onclick="closeModal('modal-trx')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tanggal</label>
+          <input id="t-date" type="date">
+        </div>
+        <div class="form-group">
+          <label>Produk</label>
+          <select id="t-product"></select>
+        </div>
+        <div class="form-group">
+          <label>Jumlah (Qty)</label>
+          <input id="t-qty" type="number" min="1" value="1" oninput="calcTrxTotal()">
+        </div>
+        <div class="form-group">
+          <label>Harga Satuan (Rp)</label>
+          <input id="t-price" type="number" readonly>
+        </div>
+        <div class="form-group full">
+          <label>Total (Rp)</label>
+          <input id="t-total" type="number" readonly style="font-weight:600; color:var(--accent)">
+        </div>
+        <div class="form-group full">
+          <label>Catatan</label>
+          <textarea id="t-note" placeholder="Catatan transaksi (opsional)…"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="t-status">
+            <option>Sukses</option>
+            <option>Pending</option>
+            <option>Dibatalkan</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('modal-trx')">Batal</button>
+      <button class="btn btn-primary" onclick="saveTrx()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div class="overlay" id="modal-confirm">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-head">
+      <span class="modal-title">Konfirmasi Hapus</span>
+      <button class="modal-close" onclick="closeModal('modal-confirm')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="confirm-box">
+        <p id="confirm-msg">Yakin ingin menghapus data ini?</p>
+        <p>Data yang dihapus <strong>tidak dapat dikembalikan</strong>.</p>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('modal-confirm')">Batal</button>
+      <button class="btn btn-danger" id="confirm-ok">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Area -->
+<div class="toast-area" id="toast-area"></div>
+
+<!-- ==================================================== SCRIPTS -->
+<script>
+/* ======================================================
+   DATA STORE
+   ====================================================== */
+let products = [
+  { id:1, code:'PRD-001', name:'Laptop Bisnis Pro 14"', cat:'Elektronik', price:12500000, stock:15, status:'Aktif', desc:'Laptop tipis bertenaga tinggi untuk produktivitas.' },
+  { id:2, code:'PRD-002', name:'Software Akuntansi Pro', cat:'Perangkat Lunak', price:2850000, stock:50, status:'Aktif', desc:'Solusi akuntansi lengkap untuk UKM.' },
+  { id:3, code:'PRD-003', name:'Mouse Wireless Ergonomis', cat:'Aksesoris', price:385000, stock:120, status:'Aktif', desc:'Mouse wireless nyaman untuk pemakaian lama.' },
+  { id:4, code:'PRD-004', name:'Keyboard Mechanical TKL', cat:'Aksesoris', price:725000, stock:60, status:'Aktif', desc:'Keyboard mekanikal compact untuk programmer.' },
+  { id:5, code:'PRD-005', name:'Monitor 27" 4K IPS', cat:'Elektronik', price:4950000, stock:20, status:'Aktif', desc:'Monitor profesional resolusi 4K warna akurat.' },
+  { id:6, code:'PRD-006', name:'Jasa Maintenance Sistem', cat:'Layanan', price:1500000, stock:999, status:'Aktif', desc:'Layanan perawatan dan pemeliharaan sistem.' },
+  { id:7, code:'PRD-007', name:'SSD Eksternal 1TB', cat:'Aksesoris', price:950000, stock:45, status:'Aktif', desc:'Storage portabel cepat USB 3.2 Gen2.' },
+  { id:8, code:'PRD-008', name:'Lisensi Microsoft 365', cat:'Perangkat Lunak', price:1750000, stock:999, status:'Aktif', desc:'Paket Office lengkap 1 tahun 5 device.' },
+  { id:9, code:'PRD-009', name:'Headset Gaming Pro', cat:'Aksesoris', price:875000, stock:35, status:'Non-Aktif', desc:'Headset 7.1 surround noise-cancelling.' },
+  { id:10, code:'PRD-010', name:'Jasa Pengembangan Web', cat:'Layanan', price:8500000, stock:999, status:'Aktif', desc:'Pembuatan website profesional full-stack.' },
+];
+
+const MONTHS = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'];
+
+function rand(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function seededRand(seed) {
+  let s = seed;
+  return function() { s = (s * 1664525 + 1013904223) & 0xFFFFFFFF; return (s >>> 0) / 0xFFFFFFFF; };
+}
+
+let transactions = (function() {
+  const rnd = seededRand(42);
+  const statuses = ['Sukses','Sukses','Sukses','Sukses','Pending','Dibatalkan'];
+  const arr = [];
+  const activeProds = products.filter(p => p.status === 'Aktif');
+  for (let i = 1; i <= 50; i++) {
+    const p = activeProds[Math.floor(rnd() * activeProds.length)];
+    const month = Math.floor(rnd() * 12) + 1;
+    const day = Math.floor(rnd() * 28) + 1;
+    const qty = Math.floor(rnd() * 4) + 1;
+    arr.push({
+      id: i,
+      inv: 'INV-2024-' + String(i).padStart(4,'0'),
+      date: `2024-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`,
+      productId: p.id,
+      product: p.name,
+      cat: p.cat,
+      qty,
+      price: p.price,
+      total: p.price * qty,
+      status: statuses[Math.floor(rnd() * statuses.length)],
+      note: ''
+    });
+  }
+  return arr.sort((a,b) => b.date.localeCompare(a.date));
+})();
+
+let nextProdId = products.length + 1;
+let nextTrxId = transactions.length + 1;
+let editProductId = null;
+
+/* ======================================================
+   NAVIGATION
+   ====================================================== */
+const viewMeta = {
+  dashboard: { title: 'Dashboard', sub: 'Overview & Summary' },
+  master:    { title: 'Master Data', sub: 'Kelola Data Produk' },
+  transaksi: { title: 'Transaksi', sub: 'Data Transaksi Penjualan' },
+  report:    { title: 'Laporan', sub: 'Analisis & Ringkasan Data' },
+};
+
+function goTo(id, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  else document.querySelector(`[onclick="goTo('${id}',this)"]`)?.classList.add('active');
+  document.getElementById('topbar-title').textContent = viewMeta[id].title;
+  document.getElementById('topbar-sub').textContent   = viewMeta[id].sub;
+  closeSidebar();
+  if (id === 'dashboard') refreshDashboard();
+  if (id === 'master')    renderProducts();
+  if (id === 'transaksi') renderTransactions();
+  if (id === 'report')    renderReport();
+}
+
+/* ======================================================
+   SIDEBAR MOBILE
+   ====================================================== */
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+/* ======================================================
+   THEME
+   ====================================================== */
+let theme = 'system';
+try { theme = localStorage.getItem('ag-theme') || 'system'; } catch(e){}
+function applyTheme(t) {
+  theme = t;
+  if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  else if (t === 'light') document.documentElement.setAttribute('data-theme','light');
+  else document.documentElement.removeAttribute('data-theme');
+  const isDark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme:dark)').matches);
+  document.getElementById('theme-label').textContent = isDark ? 'Dark' : 'Light';
+  try { localStorage.setItem('ag-theme', t); } catch(e){}
+  updateChartsTheme();
+}
+function toggleTheme() {
+  const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme:dark)').matches);
+  applyTheme(isDark ? 'light' : 'dark');
+}
+applyTheme(theme);
+
+/* ======================================================
+   FORMATTERS
+   ====================================================== */
+function fmtRp(n) {
+  if (n >= 1e9) return 'Rp ' + (n/1e9).toFixed(1).replace(/\.0$/,'') + ' M';
+  if (n >= 1e6) return 'Rp ' + (n/1e6).toFixed(1).replace(/\.0$/,'') + ' Jt';
+  return 'Rp ' + n.toLocaleString('id-ID');
+}
+function fmtDate(d) {
+  if (!d) return '-';
+  const [y,m,day] = d.split('-');
+  return `${day} ${MONTHS[+m-1]} ${y}`;
+}
+function statusBadge(s) {
+  const map = { 'Sukses':'green','Pending':'orange','Dibatalkan':'red','Aktif':'green','Non-Aktif':'red' };
+  return `<span class="badge badge-${map[s]||'blue'}">${s}</span>`;
+}
+
+/* ======================================================
+   CHART HELPERS
+   ====================================================== */
+let charts = {};
+function getColor() {
+  const r = getComputedStyle(document.documentElement);
+  return {
+    fg:     r.getPropertyValue('--fg').trim(),
+    fg2:    r.getPropertyValue('--fg2').trim(),
+    fg3:    r.getPropertyValue('--fg3').trim(),
+    border: r.getPropertyValue('--border').trim(),
+    accent: r.getPropertyValue('--accent').trim(),
+    green:  r.getPropertyValue('--green').trim(),
+    orange: r.getPropertyValue('--orange').trim(),
+    purple: r.getPropertyValue('--purple').trim(),
+    red:    r.getPropertyValue('--red').trim(),
+  };
+}
+function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
+function updateChartsTheme() { Object.keys(charts).forEach(k => { if(charts[k]) { charts[k].destroy(); delete charts[k]; } }); if (document.getElementById('view-dashboard').classList.contains('active')) refreshDashboard(); if (document.getElementById('view-report').classList.contains('active')) renderReport(); }
+
+/* ======================================================
+   DASHBOARD
+   ====================================================== */
+function refreshDashboard() {
+  const successTrx = transactions.filter(t => t.status === 'Sukses');
+  const totalRev   = successTrx.reduce((s,t) => s + t.total, 0);
+  const avgTrx     = successTrx.length ? Math.round(totalRev / successTrx.length) : 0;
+
+  document.getElementById('kpi-revenue').textContent  = fmtRp(totalRev);
+  document.getElementById('kpi-trx').textContent      = transactions.length;
+  document.getElementById('kpi-products').textContent = products.length;
+  document.getElementById('kpi-avg').textContent      = fmtRp(avgTrx);
+
+  // badge
+  document.getElementById('badge-trx').textContent = transactions.filter(t=>t.status==='Pending').length || '';
+
+  // recent 5
+  const tbody = document.querySelector('#tbl-recent tbody');
+  tbody.innerHTML = '';
+  transactions.slice(0,5).forEach((t,i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${i+1}</td><td>${fmtDate(t.date)}</td><td>${t.product}</td><td class="td-mono">${t.qty}</td><td class="td-mono">${fmtRp(t.total)}</td><td>${statusBadge(t.status)}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  drawMonthlyChart();
+  drawCategoryChart();
+}
+
+function drawMonthlyChart() {
+  destroyChart('monthly');
+  const c = getColor();
+  const monthly = Array(12).fill(0);
+  transactions.filter(t=>t.status==='Sukses').forEach(t => { monthly[+t.date.split('-')[1]-1] += t.total; });
+
+  charts.monthly = new Chart(document.getElementById('chartMonthly'), {
+    type: 'bar',
+    data: {
+      labels: MONTHS,
+      datasets: [{
+        label: 'Pendapatan',
+        data: monthly,
+        backgroundColor: c.accent + '99',
+        borderColor: c.accent,
+        borderWidth: 1.5,
+        borderRadius: 5,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: c.fg3, font: { size: 11 } }, grid: { display: false }, border: { color: c.border } },
+        y: { ticks: { color: c.fg3, font: { size: 11 }, callback: v => v >= 1e6 ? (v/1e6).toFixed(0)+'Jt' : v }, grid: { color: c.border + '55' }, border: { display: false } }
+      }
+    }
+  });
+}
+
+function drawCategoryChart() {
+  destroyChart('cat');
+  const c = getColor();
+  const catMap = {};
+  transactions.filter(t=>t.status==='Sukses').forEach(t => { catMap[t.cat] = (catMap[t.cat]||0) + t.total; });
+  const labels = Object.keys(catMap);
+  const data   = labels.map(k => catMap[k]);
+  const colors = [c.accent, c.green, c.orange, c.purple, c.red];
+
+  charts.cat = new Chart(document.getElementById('chartCat'), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors.slice(0, labels.length), borderWidth: 2, borderColor: getComputedStyle(document.documentElement).getPropertyValue('--surface') }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      cutout: '62%',
+      plugins: {
+        legend: { position: 'bottom', labels: { color: c.fg2, font: { size: 11 }, boxWidth: 10, padding: 10 } }
+      }
+    }
+  });
+}
+
+/* ======================================================
+   MASTER DATA
+   ====================================================== */
+function renderProducts() {
+  const q   = document.getElementById('search-prod').value.toLowerCase();
+  const cat = document.getElementById('filter-cat').value;
+  const list = products.filter(p =>
+    (!cat || p.cat === cat) &&
+    (!q || p.name.toLowerCase().includes(q) || p.code.toLowerCase().includes(q))
+  );
+  const tbody = document.querySelector('#tbl-products tbody');
+  tbody.innerHTML = '';
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="empty-icon">📦</div>Tidak ada produk ditemukan.</div></td></tr>`;
+    return;
+  }
+  list.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td><code style="font-size:11px;color:var(--accent)">${p.code}</code></td>
+      <td><strong>${p.name}</strong><div style="font-size:11px;color:var(--fg3);margin-top:2px">${p.desc||''}</div></td>
+      <td><span class="badge badge-blue">${p.cat}</span></td>
+      <td class="td-mono">${fmtRp(p.price)}</td>
+      <td class="td-mono" style="color:${p.stock < 10 ? 'var(--red)' : 'inherit'}">${p.stock}</td>
+      <td>${statusBadge(p.status)}</td>
+      <td>
+        <div style="display:flex;gap:5px">
+          <button class="btn btn-outline btn-sm" onclick="editProduct(${p.id})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDelete('product',${p.id},'${p.name.replace(/'/g,"\\'")}')">Hapus</button>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function openProductModal(id) {
+  editProductId = id || null;
+  document.getElementById('modal-product-title').textContent = id ? 'Edit Produk' : 'Tambah Produk';
+  if (id) {
+    const p = products.find(x => x.id === id);
+    document.getElementById('p-code').value  = p.code;
+    document.getElementById('p-name').value  = p.name;
+    document.getElementById('p-cat').value   = p.cat;
+    document.getElementById('p-price').value = p.price;
+    document.getElementById('p-stock').value = p.stock;
+    document.getElementById('p-desc').value  = p.desc;
+    document.getElementById('p-status').value= p.status;
+  } else {
+    document.getElementById('p-code').value  = 'PRD-' + String(nextProdId).padStart(3,'0');
+    document.getElementById('p-name').value  = '';
+    document.getElementById('p-cat').value   = 'Elektronik';
+    document.getElementById('p-price').value = '';
+    document.getElementById('p-stock').value = '';
+    document.getElementById('p-desc').value  = '';
+    document.getElementById('p-status').value= 'Aktif';
+  }
+  openModal('modal-product');
+}
+function editProduct(id) { openProductModal(id); }
+
+function saveProduct() {
+  const name  = document.getElementById('p-name').value.trim();
+  const price = +document.getElementById('p-price').value;
+  if (!name) { showToast('Nama produk wajib diisi!'); return; }
+  if (!price) { showToast('Harga wajib diisi!'); return; }
+
+  const data = {
+    code:   document.getElementById('p-code').value,
+    name,
+    cat:    document.getElementById('p-cat').value,
+    price,
+    stock:  +document.getElementById('p-stock').value,
+    desc:   document.getElementById('p-desc').value,
+    status: document.getElementById('p-status').value,
+  };
+
+  if (editProductId) {
+    const idx = products.findIndex(p => p.id === editProductId);
+    products[idx] = { ...products[idx], ...data };
+    showToast('Produk berhasil diperbarui ✓');
+  } else {
+    products.push({ id: nextProdId++, ...data });
+    showToast('Produk berhasil ditambahkan ✓');
+  }
+  closeModal('modal-product');
+  renderProducts();
+}
+
+/* ======================================================
+   TRANSACTIONS
+   ====================================================== */
+function renderTransactions() {
+  const q   = document.getElementById('search-trx').value.toLowerCase();
+  const st  = document.getElementById('filter-status').value;
+  const list = transactions.filter(t =>
+    (!st || t.status === st) &&
+    (!q  || t.inv.toLowerCase().includes(q) || t.product.toLowerCase().includes(q))
+  );
+  const tbody = document.querySelector('#tbl-trx tbody');
+  tbody.innerHTML = '';
+  if (!list.length) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty"><div class="empty-icon">🧾</div>Tidak ada transaksi ditemukan.</div></td></tr>`;
+    return;
+  }
+  list.forEach(t => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><code style="font-size:11px;color:var(--accent)">${t.inv}</code></td>
+      <td>${fmtDate(t.date)}</td>
+      <td>${t.product}</td>
+      <td class="td-mono">${t.qty}</td>
+      <td class="td-mono">${fmtRp(t.price)}</td>
+      <td class="td-mono"><strong>${fmtRp(t.total)}</strong></td>
+      <td>${statusBadge(t.status)}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="confirmDelete('trx',${t.id},'${t.inv}')">Hapus</button></td>`;
+    tbody.appendChild(tr);
+  });
+
+  // update badge
+  const pending = transactions.filter(x => x.status === 'Pending').length;
+  document.getElementById('badge-trx').textContent = pending || '';
+}
+
+function openTrxModal() {
+  // populate product dropdown
+  const sel = document.getElementById('t-product');
+  sel.innerHTML = '';
+  products.filter(p => p.status === 'Aktif').forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.id; opt.textContent = p.name;
+    sel.appendChild(opt);
+  });
+  sel.onchange = function() {
+    const p = products.find(x => x.id === +this.value);
+    document.getElementById('t-price').value = p ? p.price : 0;
+    calcTrxTotal();
+  };
+  sel.dispatchEvent(new Event('change'));
+
+  document.getElementById('t-date').valueAsDate = new Date();
+  document.getElementById('t-qty').value  = 1;
+  document.getElementById('t-note').value = '';
+  document.getElementById('t-status').value = 'Sukses';
+  calcTrxTotal();
+  openModal('modal-trx');
+}
+
+function calcTrxTotal() {
+  const price = +document.getElementById('t-price').value || 0;
+  const qty   = +document.getElementById('t-qty').value   || 0;
+  document.getElementById('t-total').value = price * qty;
+}
+
+function saveTrx() {
+  const pId   = +document.getElementById('t-product').value;
+  const p     = products.find(x => x.id === pId);
+  const qty   = +document.getElementById('t-qty').value;
+  const price = +document.getElementById('t-price').value;
+  const date  = document.getElementById('t-date').value;
+  if (!date)  { showToast('Tanggal wajib dipilih!'); return; }
+  if (!qty || qty < 1) { showToast('Qty wajib diisi!'); return; }
+
+  transactions.unshift({
+    id: nextTrxId,
+    inv: 'INV-2024-' + String(nextTrxId).padStart(4,'0'),
+    date,
+    productId: pId,
+    product: p.name,
+    cat: p.cat,
+    qty, price,
+    total: price * qty,
+    status: document.getElementById('t-status').value,
+    note: document.getElementById('t-note').value,
+  });
+  nextTrxId++;
+  closeModal('modal-trx');
+  renderTransactions();
+  showToast('Transaksi berhasil ditambahkan ✓');
+}
+
+/* ======================================================
+   REPORT
+   ====================================================== */
+function renderReport() {
+  const c = getColor();
+  const successTrx = transactions.filter(t => t.status === 'Sukses');
+  const totalRev   = successTrx.reduce((s,t) => s + t.total, 0);
+  const totalQty   = successTrx.reduce((s,t) => s + t.qty,   0);
+  const avgOrder   = successTrx.length ? Math.round(totalRev / successTrx.length) : 0;
+
+  document.getElementById('report-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${fmtRp(totalRev)}</div><div class="stat-lbl">Total Pendapatan (Sukses)</div></div>
+    <div class="stat-card"><div class="stat-num">${successTrx.length}</div><div class="stat-lbl">Transaksi Sukses</div></div>
+    <div class="stat-card"><div class="stat-num">${totalQty.toLocaleString('id-ID')}</div><div class="stat-lbl">Total Unit Terjual</div></div>
+  `;
+
+  // monthly line
+  destroyChart('rptLine');
+  const monthly = Array(12).fill(0);
+  successTrx.forEach(t => { monthly[+t.date.split('-')[1]-1] += t.total; });
+  charts.rptLine = new Chart(document.getElementById('chartRptLine'), {
+    type: 'line',
+    data: {
+      labels: MONTHS,
+      datasets: [{
+        label: 'Pendapatan',
+        data: monthly,
+        borderColor: c.accent,
+        backgroundColor: c.accent + '22',
+        borderWidth: 2,
+        pointBackgroundColor: c.accent,
+        pointRadius: 4,
+        fill: true,
+        tension: 0.4,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: c.fg3, font:{size:11} }, grid: { display: false }, border: { color: c.border } },
+        y: { ticks: { color: c.fg3, font:{size:11}, callback: v => v>=1e6?(v/1e6).toFixed(0)+'Jt':v }, grid: { color: c.border+'55' }, border: { display: false } }
+      }
+    }
+  });
+
+  // category bar
+  destroyChart('rptBar');
+  const catMap = {};
+  successTrx.forEach(t => { catMap[t.cat] = (catMap[t.cat]||0) + t.total; });
+  const catLabels = Object.keys(catMap).sort((a,b) => catMap[b]-catMap[a]);
+  const catColors = [c.accent, c.green, c.orange, c.purple, c.red];
+  charts.rptBar = new Chart(document.getElementById('chartRptBar'), {
+    type: 'bar',
+    data: {
+      labels: catLabels,
+      datasets: [{
+        data: catLabels.map(k => catMap[k]),
+        backgroundColor: catColors.slice(0, catLabels.length),
+        borderRadius: 5,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { ticks: { color: c.fg3, font:{size:11}, callback: v => v>=1e6?(v/1e6).toFixed(0)+'Jt':v }, grid: { color: c.border+'55' }, border: { display: false } },
+        y: { ticks: { color: c.fg3, font:{size:11} }, grid: { display: false }, border: { color: c.border } }
+      }
+    }
+  });
+
+  // product summary table
+  const prodMap = {};
+  successTrx.forEach(t => {
+    if (!prodMap[t.product]) prodMap[t.product] = { cat: t.cat, qty: 0, rev: 0, cnt: 0 };
+    prodMap[t.product].qty += t.qty;
+    prodMap[t.product].rev += t.total;
+    prodMap[t.product].cnt++;
+  });
+  const prodList = Object.entries(prodMap).sort((a,b) => b[1].rev - a[1].rev);
+  const tbody = document.querySelector('#tbl-report tbody');
+  tbody.innerHTML = '';
+  prodList.forEach(([name, d]) => {
+    const pct = totalRev > 0 ? ((d.rev / totalRev)*100).toFixed(1) : '0.0';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${name}</td><td><span class="badge badge-blue">${d.cat}</span></td><td class="td-mono">${d.qty}</td><td class="td-mono"><strong>${fmtRp(d.rev)}</strong></td><td class="td-mono">${d.cnt}</td><td class="td-mono">${pct}%</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ======================================================
+   DELETE (CONFIRM)
+   ====================================================== */
+function confirmDelete(type, id, label) {
+  document.getElementById('confirm-msg').innerHTML = `Yakin ingin menghapus <strong>${label}</strong>?`;
+  document.getElementById('confirm-ok').onclick = function() {
+    if (type === 'product') {
+      products = products.filter(p => p.id !== id);
+      renderProducts();
+      showToast('Produk berhasil dihapus.');
+    } else {
+      transactions = transactions.filter(t => t.id !== id);
+      renderTransactions();
+      showToast('Transaksi berhasil dihapus.');
+    }
+    closeModal('modal-confirm');
+  };
+  openModal('modal-confirm');
+}
+
+/* ======================================================
+   MODAL UTILS
+   ====================================================== */
+function openModal(id)  { document.getElementById(id).classList.add('open');    document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
+document.querySelectorAll('.overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === o) closeModal(o.id); });
+});
+
+/* ======================================================
+   TOAST
+   ====================================================== */
+function showToast(msg) {
+  const area = document.getElementById('toast-area');
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  area.appendChild(t);
+  setTimeout(() => t.remove(), 2800);
+}
+
+/* ======================================================
+   INIT
+   ====================================================== */
+refreshDashboard();
+</script>
+
+</body></html>
