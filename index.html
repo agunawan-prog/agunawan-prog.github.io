@@ -1,0 +1,1291 @@
+<title>Agus Gunawan — Fullstack Developer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* ───────────────────────────────────────────
+   DESIGN SYSTEM
+   Layout: sticky nav · hero · 5 stacked sections · footer
+   Color: slate-blue dark primary, electric cyan accent
+   Type: Space Grotesk (display) · Inter (body) · JetBrains Mono (code/labels)
+─────────────────────────────────────────── */
+:root {
+  --bg:        #F7F8FC;
+  --bg2:       #ECEEF5;
+  --surface:   #FFFFFF;
+  --border:    #DDE1EF;
+  --fg:        #1A1E2E;
+  --fg2:       #4A5070;
+  --fg3:       #8890AA;
+  --accent:    #2563EB;
+  --accent-2:  #1E40AF;
+  --accent-bg: #EEF4FF;
+  --tag-bg:    #F0F3FD;
+  --tag-fg:    #354090;
+  --green:     #16A34A;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:        #0D1117;
+    --bg2:       #131924;
+    --surface:   #1A2235;
+    --border:    #252F45;
+    --fg:        #E8EAF2;
+    --fg2:       #9BA3BC;
+    --fg3:       #5C6480;
+    --accent:    #3B82F6;
+    --accent-2:  #2563EB;
+    --accent-bg: #0F1E40;
+    --tag-bg:    #1C2640;
+    --tag-fg:    #93C5FD;
+    --green:     #22C55E;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:        #0D1117;
+  --bg2:       #131924;
+  --surface:   #1A2235;
+  --border:    #252F45;
+  --fg:        #E8EAF2;
+  --fg2:       #9BA3BC;
+  --fg3:       #5C6480;
+  --accent:    #3B82F6;
+  --accent-2:  #2563EB;
+  --accent-bg: #0F1E40;
+  --tag-bg:    #1C2640;
+  --tag-fg:    #93C5FD;
+  --green:     #22C55E;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  min-height: 100vh;
+  padding-left: max(0px, env(safe-area-inset-left, 0px));
+  padding-right: max(0px, env(safe-area-inset-right, 0px));
+}
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 100;
+  background: rgba(13,17,23,0);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid transparent;
+  transition: background 0.3s, border-color 0.3s;
+}
+nav.scrolled {
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  border-color: var(--border);
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.nav-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--fg);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.nav-logo span { color: var(--accent); }
+.nav-links {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  align-items: center;
+}
+.nav-links a {
+  color: var(--fg2);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-links a:hover { color: var(--fg); background: var(--bg2); }
+.nav-cta {
+  background: var(--accent) !important;
+  color: #fff !important;
+  padding: 6px 16px !important;
+}
+.nav-cta:hover { background: var(--accent-2) !important; }
+.theme-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--fg2);
+  border-radius: 6px;
+  width: 34px; height: 34px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+.theme-btn:hover { background: var(--bg2); }
+.nav-mobile-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+/* ── SECTION WRAPPER ── */
+.section {
+  padding-block: 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  max-width: 60px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.5;
+}
+h2.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+  margin-bottom: 48px;
+  color: var(--fg);
+}
+
+/* ── HERO ── */
+#hero {
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  padding-block: 100px 60px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-bg canvas { width: 100%; height: 100%; }
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 64px;
+  align-items: center;
+  position: relative;
+}
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 1.5px;
+  background: var(--accent);
+  display: inline-block;
+}
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  text-wrap: balance;
+  margin-bottom: 8px;
+}
+.hero-role {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 500;
+  color: var(--fg2);
+  margin-bottom: 24px;
+  min-height: 2em;
+}
+.hero-role .cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.hero-desc {
+  color: var(--fg2);
+  font-size: 1.05rem;
+  max-width: 520px;
+  margin-bottom: 36px;
+  line-height: 1.75;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-primary:hover { background: var(--accent-2); transform: translateY(-1px); }
+.btn-outline {
+  background: none;
+  color: var(--fg);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 24px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-outline:hover { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
+
+/* hero avatar */
+.hero-avatar-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.avatar-ring {
+  position: relative;
+  width: 260px;
+  height: 260px;
+}
+.avatar-ring canvas {
+  position: absolute;
+  inset: 0;
+  animation: rotate 12s linear infinite;
+}
+@keyframes rotate { to { transform: rotate(360deg); } }
+.avatar-circle {
+  position: absolute;
+  inset: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, #7C3AED 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 60px rgba(37,99,235,0.35);
+}
+.avatar-initials {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 32px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--fg2);
+}
+.badge .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+}
+
+/* ── STATS ── */
+#stats {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding-block: 36px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.stats-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.stat-item {
+  background: var(--surface);
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stat-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 0.82rem;
+  color: var(--fg3);
+  font-weight: 500;
+}
+
+/* ── ABOUT ── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.about-text p { color: var(--fg2); line-height: 1.8; margin-bottom: 16px; }
+.about-text p:last-child { margin-bottom: 0; }
+.about-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.highlight-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: border-color 0.2s, transform 0.15s;
+}
+.highlight-card:hover { border-color: var(--accent); transform: translateX(4px); }
+.highlight-icon {
+  width: 36px; height: 36px;
+  background: var(--accent-bg);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.highlight-text strong {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+  color: var(--fg);
+}
+.highlight-text span { font-size: 0.82rem; color: var(--fg3); }
+
+/* ── SKILLS ── */
+#skills { background: var(--bg2); }
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.skill-group {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+}
+.skill-group-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--fg2);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.skill-group-icon { font-size: 1.1rem; }
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tag {
+  background: var(--tag-bg);
+  color: var(--tag-fg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 5px;
+  letter-spacing: 0.01em;
+  border: 1px solid color-mix(in srgb, var(--tag-fg) 15%, transparent);
+  transition: background 0.15s;
+}
+.tag:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+
+/* ── EXPERIENCE ── */
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 0;
+  width: 1.5px;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 44px;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-dot {
+  position: absolute;
+  left: -34px;
+  top: 6px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+.timeline-year {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.timeline-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin-bottom: 4px;
+}
+.timeline-company {
+  font-size: 0.85rem;
+  color: var(--fg3);
+  margin-bottom: 10px;
+}
+.timeline-desc {
+  color: var(--fg2);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.timeline-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.timeline-tag {
+  font-size: 0.72rem;
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg2);
+  color: var(--fg3);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.exp-layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 48px;
+  align-items: start;
+}
+.exp-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.exp-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.exp-card-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.exp-card-label {
+  font-size: 0.82rem;
+  color: var(--fg3);
+  line-height: 1.4;
+}
+
+/* ── CONTACT ── */
+#contact { background: var(--bg2); }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.contact-info { display: flex; flex-direction: column; gap: 16px; }
+.contact-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.contact-row-icon {
+  width: 38px; height: 38px;
+  background: var(--accent-bg);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.contact-row-label {
+  font-size: 0.75rem;
+  color: var(--fg3);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.contact-row-value {
+  font-size: 0.9rem;
+  color: var(--fg);
+  font-weight: 500;
+  word-break: break-all;
+}
+.copy-btn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--fg3);
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 0.7rem;
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.copy-btn:hover { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+.contact-cta {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.contact-cta h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+.contact-cta p { color: var(--fg2); font-size: 0.9rem; line-height: 1.7; }
+.avail-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: color-mix(in srgb, var(--green) 12%, transparent);
+  color: var(--green);
+  border: 1px solid color-mix(in srgb, var(--green) 25%, transparent);
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.avail-pill .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50% { opacity:0.5; transform:scale(0.75); }
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding-block: 32px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  text-align: center;
+  color: var(--fg3);
+  font-size: 0.82rem;
+}
+footer strong { color: var(--fg2); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  .hero-avatar-wrap { order: -1; }
+  .avatar-ring { width: 180px; height: 180px; }
+  .avatar-initials { font-size: 2.4rem; }
+  h1 { font-size: clamp(2rem, 7vw, 2.8rem); }
+  .about-grid,
+  .contact-grid,
+  .exp-layout { grid-template-columns: 1fr; gap: 32px; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0; right: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    gap: 4px;
+    z-index: 200;
+  }
+  .nav-links.open a { padding: 10px 12px; border-radius: 8px; }
+  .nav-mobile-toggle { display: flex; }
+}
+@media (max-width: 480px) {
+  .stats-inner { grid-template-columns: 1fr 1fr; }
+  .section { padding-block: 56px; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+}
+</style>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-logo">AG<span>.</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">Tentang</a></li>
+      <li><a href="#skills">Keahlian</a></li>
+      <li><a href="#experience">Pengalaman</a></li>
+      <li><a href="#contact" class="nav-cta">Kontak</a></li>
+    </ul>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="theme-btn" id="themeBtn" title="Toggle tema">🌙</button>
+      <button class="nav-mobile-toggle" id="mobileToggle">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"><canvas id="bgCanvas"></canvas></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Halo, perkenalkan saya</div>
+      <h1>Agus Gunawan</h1>
+      <div class="hero-role" id="heroRole"><span id="roleText"></span><span class="cursor"></span></div>
+      <p class="hero-desc">
+        Software engineer dengan <strong>8+ tahun pengalaman</strong> membangun aplikasi web dan desktop
+        yang scalable, maintainable, dan berorientasi pada kebutuhan bisnis.
+        Berbasis di <strong>Kab. Tangerang</strong>, siap berkolaborasi remote maupun onsite.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">↗ Hubungi Saya</a>
+        <a href="#skills" class="btn-outline">🛠 Lihat Keahlian</a>
+      </div>
+      <div class="hero-badges">
+        <span class="badge"><span class="dot"></span> Open to Work</span>
+        <span class="badge">🏢 Web &amp; Desktop App</span>
+        <span class="badge">🤝 Remote Friendly</span>
+      </div>
+    </div>
+    <div class="hero-avatar-wrap">
+      <div class="avatar-ring">
+        <canvas id="ringCanvas" width="260" height="260"></canvas>
+        <div class="avatar-circle">
+          <span class="avatar-initials">AG</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <span class="stat-num" id="statYears">0</span>
+      <span class="stat-label">Tahun Pengalaman</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="statStack">0</span>
+      <span class="stat-label">Tech Stack Dikuasai</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="statDomain">2</span>
+      <span class="stat-label">Domain Proyek</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" id="statDB">4+</span>
+      <span class="stat-label">Database Dikuasai</span>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="section-inner">
+    <div class="section-label">Tentang Saya</div>
+    <h2 class="section-title">Membangun solusi digital<br>yang berdampak nyata.</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          Saya adalah seorang <strong>Fullstack Developer</strong> yang berpengalaman di dunia pengembangan
+          perangkat lunak selama lebih dari 8 tahun. Keahlian saya mencakup pengembangan aplikasi web
+          modern maupun aplikasi desktop enterprise.
+        </p>
+        <p>
+          Dengan latar belakang yang kuat di ekosistem <strong>.NET</strong>, <strong>Java Spring Boot</strong>,
+          dan <strong>Node.js</strong> di sisi backend, serta <strong>Vue.js</strong>, <strong>Angular</strong>,
+          dan <strong>Bootstrap</strong> di sisi frontend, saya mampu mendeliver produk end-to-end
+          dengan kualitas tinggi.
+        </p>
+        <p>
+          Saya juga berpengalaman dalam integrasi data menggunakan <strong>SSRS &amp; SSIS</strong>,
+          manajemen database multi-platform, serta workflow DevOps modern dengan GitHub, GitLab, TFS, dan CI/CD pipeline.
+        </p>
+      </div>
+      <div class="about-highlights">
+        <div class="highlight-card">
+          <div class="highlight-icon">⚡</div>
+          <div class="highlight-text">
+            <strong>Fullstack Development</strong>
+            <span>End-to-end delivery dari UI hingga database &amp; deployment</span>
+          </div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-icon">🗄️</div>
+          <div class="highlight-text">
+            <strong>Multi-Database Expert</strong>
+            <span>MSSQL, MySQL, Oracle, PostgreSQL — dan reporting via SSRS/SSIS</span>
+          </div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-icon">🔄</div>
+          <div class="highlight-text">
+            <strong>DevOps &amp; CI/CD</strong>
+            <span>GitHub, GitLab, TFS, pipeline automation, dan version control best practices</span>
+          </div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-icon">📐</div>
+          <div class="highlight-text">
+            <strong>System Design</strong>
+            <span>UML modeling, Swagger API documentation, Postman testing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+  <div class="section-inner">
+    <div class="section-label">Tech Stack</div>
+    <h2 class="section-title">Keahlian &amp; Teknologi</h2>
+    <div class="skills-grid">
+
+      <div class="skill-group">
+        <div class="skill-group-title">
+          <span class="skill-group-icon">⚙️</span> Backend
+        </div>
+        <div class="tags">
+          <span class="tag">.NET Framework</span>
+          <span class="tag">.NET Core</span>
+          <span class="tag">Java Spring Boot</span>
+          <span class="tag">Maven</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">Express.js</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">
+          <span class="skill-group-icon">🖥️</span> Frontend
+        </div>
+        <div class="tags">
+          <span class="tag">Vue.js</span>
+          <span class="tag">Angular.js</span>
+          <span class="tag">Bootstrap</span>
+          <span class="tag">jQuery</span>
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">
+          <span class="skill-group-icon">🗄️</span> Database &amp; Reporting
+        </div>
+        <div class="tags">
+          <span class="tag">MSSQL</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Oracle</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">SSRS</span>
+          <span class="tag">SSIS</span>
+        </div>
+      </div>
+
+      <div class="skill-group">
+        <div class="skill-group-title">
+          <span class="skill-group-icon">🔧</span> Tools &amp; DevOps
+        </div>
+        <div class="tags">
+          <span class="tag">Git</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">GitLab</span>
+          <span class="tag">TFS</span>
+          <span class="tag">CI/CD</span>
+          <span class="tag">Jira</span>
+          <span class="tag">Postman</span>
+          <span class="tag">Swagger</span>
+          <span class="tag">JSON</span>
+          <span class="tag">UML</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="section">
+  <div class="section-inner">
+    <div class="section-label">Pengalaman</div>
+    <h2 class="section-title">Perjalanan Karier</h2>
+    <div class="exp-layout">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2022 — Sekarang</div>
+          <div class="timeline-title">Senior Fullstack Developer</div>
+          <div class="timeline-company">Perusahaan Teknologi · Kab. Tangerang</div>
+          <div class="timeline-desc">
+            Memimpin pengembangan aplikasi web enterprise berbasis .NET Core dan Vue.js.
+            Bertanggung jawab atas arsitektur sistem, code review, integrasi API, serta CI/CD pipeline.
+            Berkolaborasi lintas tim menggunakan Jira &amp; GitLab.
+          </div>
+          <div class="timeline-tags">
+            <span class="timeline-tag">.NET Core</span>
+            <span class="timeline-tag">Vue.js</span>
+            <span class="timeline-tag">PostgreSQL</span>
+            <span class="timeline-tag">Docker</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2019 — 2022</div>
+          <div class="timeline-title">Fullstack Developer</div>
+          <div class="timeline-company">Perusahaan Software House</div>
+          <div class="timeline-desc">
+            Mengembangkan sistem manajemen dan pelaporan berbasis Java Spring Boot dan Angular.
+            Membangun modul reporting menggunakan SSRS dan integrasi data via SSIS ke beberapa
+            database enterprise (Oracle, MSSQL).
+          </div>
+          <div class="timeline-tags">
+            <span class="timeline-tag">Spring Boot</span>
+            <span class="timeline-tag">Angular</span>
+            <span class="timeline-tag">Oracle</span>
+            <span class="timeline-tag">SSRS</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2016 — 2019</div>
+          <div class="timeline-title">Web &amp; Desktop Developer</div>
+          <div class="timeline-company">Perusahaan IT · Jakarta</div>
+          <div class="timeline-desc">
+            Membangun aplikasi web dengan .NET Framework dan jQuery, serta aplikasi desktop WinForms.
+            Mengelola database MySQL dan MSSQL, termasuk stored procedure dan query optimization.
+          </div>
+          <div class="timeline-tags">
+            <span class="timeline-tag">.NET Framework</span>
+            <span class="timeline-tag">jQuery</span>
+            <span class="timeline-tag">MySQL</span>
+            <span class="timeline-tag">MSSQL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-highlights">
+        <div class="exp-card">
+          <div class="exp-card-num">8+</div>
+          <div class="exp-card-label">Tahun di industri pengembangan perangkat lunak</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-card-num">Web</div>
+          <div class="exp-card-label">Aplikasi berbasis web — SPA, MVC, REST API</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-card-num">Desktop</div>
+          <div class="exp-card-label">Aplikasi enterprise berbasis desktop &amp; reporting</div>
+        </div>
+        <div class="exp-card">
+          <div class="exp-card-num">4+</div>
+          <div class="exp-card-label">Platform database yang dikuasai secara profesional</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="section-inner">
+    <div class="section-label">Kontak</div>
+    <h2 class="section-title">Mari Berkolaborasi</h2>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="contact-row">
+          <div class="contact-row-icon">👤</div>
+          <div>
+            <div class="contact-row-label">Nama</div>
+            <div class="contact-row-value">Agus Gunawan</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">📍</div>
+          <div>
+            <div class="contact-row-label">Domisili</div>
+            <div class="contact-row-value">Kabupaten Tangerang, Banten</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">💼</div>
+          <div>
+            <div class="contact-row-label">Profesi</div>
+            <div class="contact-row-value">Software Engineer · Fullstack Developer</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-row-icon">📧</div>
+          <div style="flex:1;min-width:0;">
+            <div class="contact-row-label">Email</div>
+            <div class="contact-row-value" id="emailVal">denicang@gmail.com</div>
+          </div>
+          <button class="copy-btn" onclick="copyText('denicang@gmail.com', this)">copy</button>
+        </div>
+      </div>
+
+      <div class="contact-cta">
+        <span class="avail-pill"><span class="dot"></span>Open to Opportunities</span>
+        <h3>Siap untuk proyek baru atau peluang karier?</h3>
+        <p>
+          Saya terbuka untuk diskusi proyek freelance, posisi fulltime, maupun kolaborasi teknis lainnya.
+          Silakan hubungi melalui email atau platform profesional di bawah ini.
+        </p>
+        <div style="display:flex;flex-direction:column;gap:10px;width:100%;">
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:0.85rem;color:var(--fg2);">
+            📧 <strong>Email:</strong> <span style="color:var(--fg);font-family:'JetBrains Mono',monospace;font-size:0.82rem;">denicang@gmail.com</span>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;font-size:0.85rem;color:var(--fg2);">
+            📍 <strong>Lokasi:</strong> <span style="color:var(--fg);">Kab. Tangerang · Remote OK</span>
+          </div>
+        </div>
+        <button class="btn-primary" style="width:100%;justify-content:center;" onclick="copyText('denicang@gmail.com', this)">
+          📋 Salin Alamat Email
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2024 <strong>Agus Gunawan</strong> · Software Engineer &amp; Fullstack Developer · Kab. Tangerang</p>
+  <p style="margin-top:4px;font-size:0.75rem;">Dibuat dengan ♥ — Tersedia untuk proyek &amp; peluang baru</p>
+</footer>
+
+<script>
+// ── THEME ──
+const root = document.documentElement;
+const themeBtn = document.getElementById('themeBtn');
+let theme = (() => { try { return localStorage.getItem('ag-theme') || 'system'; } catch { return 'system'; } })();
+function applyTheme(t) {
+  if (t === 'dark') { root.setAttribute('data-theme','dark'); themeBtn.textContent='☀️'; }
+  else if (t === 'light') { root.setAttribute('data-theme','light'); themeBtn.textContent='🌙'; }
+  else { root.removeAttribute('data-theme'); themeBtn.textContent = window.matchMedia('(prefers-color-scheme:dark)').matches ? '☀️' : '🌙'; }
+  try { localStorage.setItem('ag-theme', t); } catch {}
+}
+applyTheme(theme);
+themeBtn.addEventListener('click', () => {
+  const cur = root.getAttribute('data-theme');
+  theme = cur === 'dark' ? 'light' : 'dark';
+  applyTheme(theme);
+});
+
+// ── MOBILE NAV ──
+const mobileToggle = document.getElementById('mobileToggle');
+const navLinks = document.getElementById('navLinks');
+mobileToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+// ── STICKY NAV ──
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+// ── TYPING EFFECT ──
+const roles = ['Fullstack Developer', 'Web Developer', 'Software Engineer', 'Backend Developer', '.NET & Java Expert'];
+let roleIdx = 0, charIdx = 0, deleting = false;
+const roleText = document.getElementById('roleText');
+function type() {
+  const word = roles[roleIdx];
+  if (!deleting) {
+    roleText.textContent = word.slice(0, ++charIdx);
+    if (charIdx === word.length) { deleting = true; setTimeout(type, 1800); return; }
+  } else {
+    roleText.textContent = word.slice(0, --charIdx);
+    if (charIdx === 0) { deleting = false; roleIdx = (roleIdx + 1) % roles.length; }
+  }
+  setTimeout(type, deleting ? 50 : 80);
+}
+type();
+
+// ── COUNTER ANIMATION ──
+function animateCount(el, end, suffix = '', duration = 1200) {
+  let start = 0, startTime = null;
+  const isNum = !isNaN(parseInt(end));
+  if (!isNum) { el.textContent = end; return; }
+  const target = parseInt(end);
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    const p = Math.min((ts - startTime) / duration, 1);
+    el.textContent = Math.floor(p * target) + suffix;
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = target + suffix;
+  }
+  requestAnimationFrame(step);
+}
+const statsObserver = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) {
+    animateCount(document.getElementById('statYears'), 8, '+');
+    animateCount(document.getElementById('statStack'), 25, '+');
+    statsObserver.disconnect();
+  }
+}, { threshold: 0.5 });
+statsObserver.observe(document.getElementById('stats'));
+
+// ── BACKGROUND CANVAS ──
+(function() {
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, nodes = [];
+  function resize() {
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+  for (let i = 0; i < 48; i++) {
+    nodes.push({ x: Math.random()*w, y: Math.random()*h, vx: (Math.random()-.5)*0.3, vy: (Math.random()-.5)*0.3, r: Math.random()*1.5+0.5 });
+  }
+  function getAccent() {
+    const dark = root.getAttribute('data-theme') === 'dark' || (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme:dark)').matches);
+    return dark ? '59,130,246' : '37,99,235';
+  }
+  function draw() {
+    ctx.clearRect(0,0,w,h);
+    const c = getAccent();
+    nodes.forEach(n => {
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < 0||n.x > w) n.vx *= -1;
+      if (n.y < 0||n.y > h) n.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(${c},0.4)`;
+      ctx.fill();
+    });
+    nodes.forEach((a,i) => {
+      nodes.slice(i+1).forEach(b => {
+        const d = Math.hypot(a.x-b.x, a.y-b.y);
+        if (d < 140) {
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = `rgba(${c},${0.12 * (1 - d/140)})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      });
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── RING CANVAS ──
+(function() {
+  const canvas = document.getElementById('ringCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = 130, cy = 130, r = 118;
+  const dashes = 32;
+  let angle = 0;
+  function getAccent() {
+    const dark = root.getAttribute('data-theme') === 'dark' || (!root.getAttribute('data-theme') && window.matchMedia('(prefers-color-scheme:dark)').matches);
+    return dark ? '#3B82F6' : '#2563EB';
+  }
+  function draw() {
+    ctx.clearRect(0,0,260,260);
+    const color = getAccent();
+    for (let i = 0; i < dashes; i++) {
+      const a = angle + (i / dashes) * Math.PI * 2;
+      const opacity = 0.15 + 0.6 * Math.abs(Math.sin(i/dashes * Math.PI));
+      const x1 = cx + Math.cos(a) * (r - 6), y1 = cy + Math.sin(a) * (r - 6);
+      const x2 = cx + Math.cos(a) * r, y2 = cy + Math.sin(a) * r;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = opacity;
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+    angle += 0.008;
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ── COPY ──
+function copyText(text, btn) {
+  const orig = btn.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ copied';
+    btn.style.color = 'var(--green)';
+    setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓ copied'; btn.style.color = 'var(--green)';
+    setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 2000);
+  });
+}
+
+// ── FADE IN ON SCROLL ──
+const fadeEls = document.querySelectorAll('.section, .skill-group, .timeline-item, .highlight-card, .contact-row, .exp-card');
+fadeEls.forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(18px)';
+  el.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+});
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'none';
+      fadeObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+fadeEls.forEach(el => fadeObs.observe(el));
+
+// honor prefers-reduced-motion
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  fadeEls.forEach(el => { el.style.opacity='1'; el.style.transform='none'; el.style.transition='none'; });
+}
+</script>
