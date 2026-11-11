@@ -1,3 +1,4 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Agus Gunawan — Fullstack Developer</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -174,6 +175,24 @@ h1 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.4rem, 6vw, 4re
 .project-footer { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding-left: 32px; }
 .project-period { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--accent); background: var(--accent-bg); padding: 2px 8px; border-radius: 100px; white-space: nowrap; }
 .project-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; background: var(--bg2); color: var(--fg3); padding: 2px 7px; border-radius: 4px; }
+
+/* ── IN-PROGRESS SECTION ── */
+.inprogress-section { margin-bottom: 36px; }
+.inprogress-label { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.inprogress-label .pulse-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 0 0 rgba(34,197,94,.5); animation: pulse-ring 1.6s ease-out infinite; flex-shrink: 0; }
+@keyframes pulse-ring { 0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)} 70%{box-shadow:0 0 0 8px rgba(34,197,94,0)} 100%{box-shadow:0 0 0 0 rgba(34,197,94,0)} }
+.inprogress-label span { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); font-weight: 600; }
+.inprogress-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.ip-card { background: var(--surface); border: 1.5px solid var(--green); border-radius: 14px; padding: 18px 20px; position: relative; overflow: hidden; }
+.ip-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(34,197,94,.06) 0%, transparent 60%); pointer-events: none; }
+.ip-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.ip-card-name { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.92rem; color: var(--fg); line-height: 1.35; }
+.ip-badge { font-size: 0.65rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: rgba(34,197,94,.15); color: var(--green); border: 1px solid rgba(34,197,94,.35); padding: 2px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+.ip-card-company { font-size: 0.78rem; color: var(--fg3); margin-bottom: 6px; }
+.ip-card-desc { font-size: 0.82rem; color: var(--fg2); line-height: 1.6; margin-bottom: 10px; }
+.ip-card-footer { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.ip-period { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent); background: var(--accent-bg); padding: 2px 8px; border-radius: 100px; }
+.ip-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; background: var(--bg2); color: var(--fg3); padding: 2px 6px; border-radius: 4px; }
 
 /* ── CONTACT ── */
 #contact { background: var(--bg2); }
@@ -401,6 +420,69 @@ footer strong { color: var(--fg2); }
   <div class="section-inner">
     <div class="section-label">Pengalaman &amp; Proyek</div>
     <h2 class="section-title">Perjalanan Karier</h2>
+    <!-- SEDANG DIKERJAKAN -->
+    <div class="inprogress-section">
+      <div class="inprogress-label">
+        <span class="pulse-dot"></span>
+        <span>Sedang Dikerjakan — Active Projects</span>
+      </div>
+      <div class="inprogress-cards">
+
+        <div class="ip-card">
+          <div class="ip-card-top">
+            <span class="ip-card-name">Virtual E-Briefing — Aviator Virtual Briefing System</span>
+            <span class="ip-badge">In Progress</span>
+          </div>
+          <div class="ip-card-company">PT. Aero System Indonesia · Klien PT. Citilink Indonesia</div>
+          <div class="ip-card-desc">Platform virtual briefing pre-flight antara Flight Operation Officer (FOO) dan Pilot in Command (PIC) — integrasi Microsoft Teams, otomatisasi jadwal dari Flight Dispatch, attendance tracking, compliance logging, dan mobile app Flutter untuk flight crew via iPad.</div>
+          <div class="ip-card-footer">
+            <span class="ip-period">Nov 2026 – Sekarang</span>
+            <span class="ip-tag">.NET Core 10</span><span class="ip-tag">Angular 22</span><span class="ip-tag">Flutter</span><span class="ip-tag">SQL Server 2025</span><span class="ip-tag">Azure</span><span class="ip-tag">Docker</span><span class="ip-tag">MS Graph API</span>
+          </div>
+        </div>
+
+        <div class="ip-card">
+          <div class="ip-card-top">
+            <span class="ip-card-name">WMS — Warehouse Management System Siloam Hospitals</span>
+            <span class="ip-badge">In Progress</span>
+          </div>
+          <div class="ip-card-company">PT. Adi Cons · On Site Siloam Hospital Head Office</div>
+          <div class="ip-card-desc">Sistem manajemen gudang terintegrasi untuk operasional farmasi dan logistik Siloam Hospitals — transfer order, penerimaan barang, stock opname, cycle count, konsinyasi, item OPD/IPD, integrasi D365 & ERP pusat. Multi-warehouse, multi-unit.</div>
+          <div class="ip-card-footer">
+            <span class="ip-period">Jan 2026 – Sekarang</span>
+            <span class="ip-tag">Node.js</span><span class="ip-tag">TypeScript</span><span class="ip-tag">Vue.js</span><span class="ip-tag">Kubernetes</span><span class="ip-tag">D365</span>
+          </div>
+        </div>
+
+        <div class="ip-card">
+          <div class="ip-card-top">
+            <span class="ip-card-name">ASDP AMS Phase 2 — AMS Execution &amp; Inspection</span>
+            <span class="ip-badge">In Progress</span>
+          </div>
+          <div class="ip-card-company">PT. Aero System Indonesia · Klien PT. ASDP Indonesia Ferry</div>
+          <div class="ip-card-desc">Lanjutan Phase 1 — pengelolaan eksekusi kegiatan perawatan & perbaikan kapal berdasarkan rencana yang disetujui, pencatatan inspeksi kapal & pelabuhan termasuk upload dokumen, foto, dan validasi data via Excel import.</div>
+          <div class="ip-card-footer">
+            <span class="ip-period">Jan 2026 – Sekarang</span>
+            <span class="ip-tag">Java Spring Boot</span><span class="ip-tag">PostgreSQL</span><span class="ip-tag">REST API</span><span class="ip-tag">Apache POI</span>
+          </div>
+        </div>
+
+        <div class="ip-card">
+          <div class="ip-card-top">
+            <span class="ip-card-name">Manage Service ProSPRT Nokia</span>
+            <span class="ip-badge">In Progress</span>
+          </div>
+          <div class="ip-card-company">PT. Aero System Indonesia · Klien Nokia</div>
+          <div class="ip-card-desc">Pengelolaan layanan dan pemeliharaan sistem ProSPRT Nokia — monitoring, bug fixing, penambahan fitur, dan support operasional sistem pengadaan jasa subkontraktor secara berkelanjutan.</div>
+          <div class="ip-card-footer">
+            <span class="ip-period">Agt 2026 – Sekarang</span>
+            <span class="ip-tag">ASP.NET Core 8</span><span class="ip-tag">React</span><span class="ip-tag">PostgreSQL</span><span class="ip-tag">Azure AD</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="exp-companies">
 
       <!-- PT. Adi Cons -->
@@ -426,7 +508,7 @@ footer strong { color: var(--fg2); }
               <span class="project-num">01</span>
               <span class="project-name">WMS — Warehouse Management System Siloam Hospitals</span>
             </div>
-            <div class="project-type">Web Enterprise · Multi-service · In Progress</div>
+            <div class="project-type">Web Enterprise · Multi-service · <span style="color:var(--green);font-weight:600;">🟢 In Progress</span></div>
             <div class="project-desc">Sistem manajemen gudang terintegrasi untuk operasional farmasi dan logistik Siloam Hospitals — mencakup transfer order, penerimaan barang, stock opname, cycle count, manajemen konsinyasi, item OPD/IPD, BOM produksi, dan integrasi dengan Kairos, D365, dan sistem ERP pusat. Multi-warehouse, multi-unit.</div>
             <div class="project-footer">
               <span class="project-period">Jan 2026 – Sekarang</span>
@@ -509,9 +591,22 @@ footer strong { color: var(--fg2); }
           <div class="project-card">
             <div class="project-header">
               <span class="project-num">01</span>
+              <span class="project-name">Virtual E-Briefing — Aviator Virtual Briefing System</span>
+            </div>
+            <div class="project-type">Web App &amp; Mobile (iPad) · Full Stack · Klien PT. Citilink Indonesia · <span style="color:var(--green);font-weight:600;">🟢 In Progress</span></div>
+            <div class="project-desc">Platform virtual briefing pre-flight antara Flight Operation Officer (FOO) dan Pilot in Command (PIC) Citilink Indonesia — terintegrasi real-time dengan Microsoft Teams untuk Virtual Briefing Room, otomatisasi jadwal dari Flight Dispatch, Unified Briefing Cards, attendance tracking, compliance logging, dan mobile app Flutter untuk flight crew via iPad. Dikembangkan 2 fase dengan Scrum Framework.</div>
+            <div class="project-footer">
+              <span class="project-period">Nov 2026 – Sekarang</span>
+              <span class="project-tag">.NET Core 10</span><span class="project-tag">Angular 22</span><span class="project-tag">Flutter (iOS/iPad)</span><span class="project-tag">SQL Server 2025</span><span class="project-tag">Azure (Linux 3.0)</span><span class="project-tag">Azure Blob Storage</span><span class="project-tag">Docker</span><span class="project-tag">Microsoft Graph API</span><span class="project-tag">API Gateway</span><span class="project-tag">RBAC</span><span class="project-tag">MFA</span><span class="project-tag">Swagger</span><span class="project-tag">OWASP Top 10</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-header">
+              <span class="project-num">02</span>
               <span class="project-name">Manage Service ProSPRT Nokia</span>
             </div>
-            <div class="project-type">Maintenance &amp; Support · In Progress</div>
+            <div class="project-type">Maintenance &amp; Support · <span style="color:var(--green);font-weight:600;">🟢 In Progress</span></div>
             <div class="project-desc">Pengelolaan layanan dan pemeliharaan sistem ProSPRT Nokia — monitoring, bug fixing, penambahan fitur, dan support operasional sistem pengadaan jasa subkontraktor secara berkelanjutan.</div>
             <div class="project-footer">
               <span class="project-period">Agt 2026 – Sekarang</span>
@@ -521,10 +616,10 @@ footer strong { color: var(--fg2); }
 
           <div class="project-card">
             <div class="project-header">
-              <span class="project-num">02</span>
+              <span class="project-num">03</span>
               <span class="project-name">ASDP AMS Phase 2 — AMS Execution &amp; Inspection</span>
             </div>
-            <div class="project-type">Web Enterprise · Backend Microservices · Klien PT ASDP Indonesia Ferry</div>
+            <div class="project-type">Web Enterprise · Backend Microservices · Klien PT ASDP Indonesia Ferry · <span style="color:var(--green);font-weight:600;">🟢 In Progress</span></div>
             <div class="project-desc">Lanjutan Phase 1: AMS Execution untuk pengelolaan eksekusi kegiatan perawatan & perbaikan kapal berdasarkan rencana yang disetujui, dan AMS Inspection untuk pencatatan inspeksi kapal & pelabuhan termasuk upload dokumen, foto, dan validasi data via Excel import.</div>
             <div class="project-footer">
               <span class="project-period">Jan 2026 – Sekarang</span>
@@ -534,7 +629,7 @@ footer strong { color: var(--fg2); }
 
           <div class="project-card">
             <div class="project-header">
-              <span class="project-num">03</span>
+              <span class="project-num">04</span>
               <span class="project-name">ASDP AMS Phase 1 — Asset Management System (AMS Planning)</span>
             </div>
             <div class="project-type">Web Enterprise · Backend Microservices · Klien PT ASDP Indonesia Ferry</div>
@@ -547,7 +642,7 @@ footer strong { color: var(--fg2); }
 
           <div class="project-card">
             <div class="project-header">
-              <span class="project-num">04</span>
+              <span class="project-num">05</span>
               <span class="project-name">ProSPRT Nokia — Professional Service Procurement &amp; Resource Tracking</span>
             </div>
             <div class="project-type">Web Enterprise · Klien Nokia</div>
@@ -560,7 +655,7 @@ footer strong { color: var(--fg2); }
 
           <div class="project-card">
             <div class="project-header">
-              <span class="project-num">05</span>
+              <span class="project-num">06</span>
               <span class="project-name">Cargo Citilink — Aplikasi Pengiriman Cargo</span>
             </div>
             <div class="project-type">Desktop Application · WinForms</div>
@@ -704,7 +799,7 @@ footer strong { color: var(--fg2); }
 <!-- FOOTER -->
 <footer>
   <p>© 2024–2026 <strong>Agus Gunawan</strong> · Software Engineer &amp; Fullstack Developer · Kab. Tangerang</p>
-  <p style="margin-top:4px;font-size:0.75rem;">Tersedia untuk proyek &amp; peluang baru · 8+ tahun · 15+ proyek enterprise</p>
+  <p style="margin-top:4px;font-size:0.75rem;">Tersedia untuk proyek &amp; peluang baru · 8+ tahun · 16+ proyek enterprise</p>
 </footer>
 
 <script>
@@ -771,7 +866,7 @@ function animateCount(el, end, suffix = '', duration = 1200) {
 new IntersectionObserver(entries => {
   if (entries[0].isIntersecting) {
     animateCount(document.getElementById('statYears'), 8, '+');
-    animateCount(document.getElementById('statProjects'), 15, '+');
+    animateCount(document.getElementById('statProjects'), 16, '+');
     animateCount(document.getElementById('statStack'), 35, '+');
   }
 }, { threshold: 0.5 }).observe(document.getElementById('stats'));
@@ -847,3 +942,5 @@ if (!window.matchMedia('(prefers-reduced-motion:reduce)').matches) {
   })();
 }
 </script>
+
+</body></html>
